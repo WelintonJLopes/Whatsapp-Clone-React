@@ -4,6 +4,7 @@ import "./App.css";
 import ChatListItem from './components/ChatListItem';
 import ChatIntro from './components/ChatIntro';
 import ChatWindow from './components/ChatWindow';
+import NewChat from './components/NewChat';
 
 import DonutLargeIcon from '@material-ui/icons/DonutLarge';
 import ChatIcon from '@material-ui/icons/Chat';
@@ -12,23 +13,40 @@ import SearchIcon from '@material-ui/icons/Search';
 
 export default () => {
 
-  const[chatlist, setChatlist] = useState([
+  const [chatlist, setChatlist] = useState([
     {chatId: 1, title: 'Fulano de Tal', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR3iIgI38-hHiJhKKNv2Hsr7L-3ex2CoOjrrw&usqp=CAU'},
     {chatId: 2, title: 'Fulano de Tal', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR3iIgI38-hHiJhKKNv2Hsr7L-3ex2CoOjrrw&usqp=CAU'},
     {chatId: 3, title: 'Fulano de Tal', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR3iIgI38-hHiJhKKNv2Hsr7L-3ex2CoOjrrw&usqp=CAU'}
   ]);
-  const[activeChat, setActiveChat] = useState({});
+  const [activeChat, setActiveChat] = useState({});
+  const [user, setUser] = useState({
+    id: 1234,
+    avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR3iIgI38-hHiJhKKNv2Hsr7L-3ex2CoOjrrw&usqp=CAU',
+    name: 'Welinton Jose'
+  })
+
+  const [showNewChat, setShowNewChat] = useState(false);
+
+  const handleNewChat = () => {
+    setShowNewChat(true);
+  }
 
   return(
     <div className="app-window">
       <div className="sidebar">
+        <NewChat
+          chatlist={chatlist}
+          user={user}
+          show={showNewChat}
+          setShow={setShowNewChat}
+        />
         <header>
-          <img className="header-avatar" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR3iIgI38-hHiJhKKNv2Hsr7L-3ex2CoOjrrw&usqp=CAU" alt=""/>
+          <img className="header-avatar" src={user.avatar} alt=""/>
           <div className="header-buttons">
             <div className="header-btn">
               <DonutLargeIcon style={{color: '#919191'}}/>
             </div>
-            <div className="header-btn">
+            <div onClick={handleNewChat} className="header-btn">
               <ChatIcon style={{color: '#919191'}}/>
             </div>
             <div className="header-btn">
@@ -55,7 +73,9 @@ export default () => {
       </div>
       <div className="contentarea">
         {activeChat.chatId !== undefined &&
-          <ChatWindow/>
+          <ChatWindow
+            user={user}
+          />
         }
         {activeChat.chatId === undefined &&
           <ChatIntro/>
