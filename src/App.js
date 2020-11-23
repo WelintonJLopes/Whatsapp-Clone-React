@@ -1,10 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import "./App.css";
 
+import Api from './Api';
+
 import ChatListItem from './components/ChatListItem';
 import ChatIntro from './components/ChatIntro';
 import ChatWindow from './components/ChatWindow';
 import NewChat from './components/NewChat';
+import Login from './components/Login';
 
 import DonutLargeIcon from '@material-ui/icons/DonutLarge';
 import ChatIcon from '@material-ui/icons/Chat';
@@ -13,22 +16,39 @@ import SearchIcon from '@material-ui/icons/Search';
 
 export default () => {
 
-  const [chatlist, setChatlist] = useState([
-    {chatId: 1, title: 'Fulano de Tal', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR3iIgI38-hHiJhKKNv2Hsr7L-3ex2CoOjrrw&usqp=CAU'},
-    {chatId: 2, title: 'Fulano de Tal', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR3iIgI38-hHiJhKKNv2Hsr7L-3ex2CoOjrrw&usqp=CAU'},
-    {chatId: 3, title: 'Fulano de Tal', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR3iIgI38-hHiJhKKNv2Hsr7L-3ex2CoOjrrw&usqp=CAU'}
-  ]);
+  const [chatlist, setChatlist] = useState([]);
   const [activeChat, setActiveChat] = useState({});
   const [user, setUser] = useState({
-    id: 1234,
-    avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR3iIgI38-hHiJhKKNv2Hsr7L-3ex2CoOjrrw&usqp=CAU',
-    name: 'Welinton Jose'
-  })
+    id:'clTueEHZwRRcXeI2YlYnfIw3aNr2',
+    name:'Welinton JLopes',
+    avatar:'https://graph.facebook.com/2814598182122572/picture'
+  });
 
   const [showNewChat, setShowNewChat] = useState(false);
 
+  useEffect(()=>{
+    if(user !== null) {
+      let unsub = Api.onChatList(user.id, setChatlist);
+      return unsub;
+    }
+  }, [user]);
+
   const handleNewChat = () => {
     setShowNewChat(true);
+  }
+
+  const handleLoginData = async (u) => {
+    let newUser = {
+      id: u.uid,
+      name: u.displayName,
+      avatar: u.photoURL
+    } 
+    await Api.addUser(newUser);
+    setUser(newUser);
+  }
+
+  if(user === null) {
+    return(<Login onReceive={handleLoginData}/>);
   }
 
   return(
