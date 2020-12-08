@@ -18,12 +18,7 @@ export default () => {
 
   const [chatlist, setChatlist] = useState([]);
   const [activeChat, setActiveChat] = useState({});
-  const [user, setUser] = useState({
-    id:'clTueEHZwRRcXeI2YlYnfIw3aNr2',
-    name:'Welinton JLopes',
-    avatar:'https://graph.facebook.com/2814598182122572/picture'
-  });
-
+  const [user, setUser] = useState(null);
   const [showNewChat, setShowNewChat] = useState(false);
 
   useEffect(()=>{
@@ -95,6 +90,7 @@ export default () => {
         {activeChat.chatId !== undefined &&
           <ChatWindow
             user={user}
+            data={activeChat}
           />
         }
         {activeChat.chatId === undefined &&
