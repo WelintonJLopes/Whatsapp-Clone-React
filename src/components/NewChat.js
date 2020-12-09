@@ -24,7 +24,7 @@ export default ({user, chatlist, show, setShow}) => {
 
     handleClose();
   }
-//teste
+//teste 2
   const handleClose = () => {
     setShow(false);
   }
